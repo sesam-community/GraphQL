@@ -4,6 +4,8 @@ from sesamutils.flask import serve
 from data_access import DataAccess
 from utils import stream_json
 import sys
+import os
+import json
 
 app = Flask(__name__)
 logger = sesam_logger("GraphQL", app=app)
@@ -18,13 +20,14 @@ if not config.validate():
 data_access_layer = DataAccess(config)
 
 
-@app.route("/<path:path>", methods=["POST"])
+@app.route("/<path:path>", methods=["GET"])
 def get(path):
 
-    query = request.get_json()
-    entities = stream_json(data_access_layer.get_entities(path, query))
+    url = os.environ.get(path+"-url")
+    query = os.environ.get(str(path+"-query"))
+    logger.debug(query)
+    entities = stream_json(data_access_layer.get_entities(url, query))
     logger.debug(entities)
-# evt stream_json(entities) i response. fra utils-modulen til anders
     return Response(entities, mimetype='application/json')
 
 

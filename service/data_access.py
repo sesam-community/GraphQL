@@ -14,23 +14,23 @@ class DataAccess:
         self.auth_header = None
         self.config = config
 
-    def __get_all_entities(self, path, query):
-        logger.info('fetching entities')
-        url = self.config.baseurl + path
+    def __get_all_entities(self, url, query):
+        logger.info('Fetching entities')
+        url = self.config.baseurl + url
         logger.debug("url: " + url)
         req = self.request("POST", url, query)
         if not req.ok:
             logger.debug(req)
             logger.info('request not ok')
         else:
+            logger.debug("req.ok in __get_all_entities")
             res = req.json()
-            # evt   res = Dotdictify(req.json())
 
             yield res
 
-    def get_entities(self, path, query):
-        print("getting all entities")
-        return self.__get_all_entities(path, query)
+    def get_entities(self, url, query):
+        logger.info("Getting all entities")
+        return self.__get_all_entities(url, query)
 
     def get_token(self):
         payload = {
@@ -68,15 +68,20 @@ class DataAccess:
             headers = {**headers, "Content-Type": "application/json"}
             logger.debug("json in kwargs")
 
-        logger.debug(headers)
-        query = json.loads(query)
-        logger.debug(query)
-        req = requests.Request(method, url, headers=headers, data=query, **kwargs)
+        logger.debug("headers before req build: " + str(headers))
+        logger.debug("query before req build: " + str(query))
 
-        resp = self.session.send(req.prepare())
+        req = requests.Request(method, url, headers=headers, data=query, **kwargs)
+        logger.debug("got past requests.Request")
+        try:
+            resp = self.session.send(req.prepare())
+        except Exception as e:
+            logger.error(f"Failed to send request. Error: {e}")
+            raise
+        logger.debug("got past session.send(req.prepare)")
         if resp.status_code == 401:
             logger.warning("Received status 401. Requesting new access token.")
             self.get_token()
             resp = self.session.send(req.prepare())
-        logger.debug(resp.json())
+        logger.debug("got to end of request method")
         return resp
