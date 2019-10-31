@@ -27,7 +27,7 @@ def get(path):
 
     url = path
     query = request.args["query"]
-    logger.debug("url from request.args: " + str(url))
+    logger.debug("url from path: " + str(url))
     logger.debug("query from request.args: " + str(query))
 
     entities = stream_json(data_access_layer.get_entities(url, query))
