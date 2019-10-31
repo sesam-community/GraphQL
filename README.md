@@ -42,7 +42,7 @@ Replace \<query\> with the URL route you send with the request to the connector 
   "verify_ssl": true
 }
 ```
-The quotation marks in the query need to be escaped as we are already working in a json text structure.
+The quotation marks in the query need to be escaped as the query needs to be in json and we are already working in a json structure.
 
 ### Example input pipe config
 ```
