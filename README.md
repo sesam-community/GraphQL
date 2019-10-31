@@ -71,3 +71,4 @@ The quotation marks in the query need to be escaped as the query needs to be in 
   }
 }
 ```
+The query-string needs to have the quotation marks escaped as we're already working in a json format.
