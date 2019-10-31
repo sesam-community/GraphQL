@@ -10,12 +10,6 @@ Connector for Sesam to query API's that use the GraphQL query language. This ver
 * resource
 * token_url
 
-##### Query specific
-* \<query\>-url
-* \<query\>-query
-
-Replace \<query\> with the URL route you send with the request to the connector through the input pipe's ```source.url``` parameter.
-
 #### Optional
 * LOG_LEVEL
 
@@ -27,7 +21,7 @@ Replace \<query\> with the URL route you send with the request to the connector 
   "docker": {
     "environment": {
       "LOG_LEVEL": "DEBUG",
-      "baseurl": "https://somewebpage.com",
+      "baseurl": "https://somewebpage.com/",
       "client_id": "<client ID for Azure AD authentication>",
       "client_secret": "<client secret for Azure AD authentication>",
       "person-query": "{\"query\": \"{person{id name address{streetAddress postalCode country} dateOfBirth}}\"}",
@@ -52,7 +46,7 @@ The quotation marks in the query need to be escaped as the query needs to be in 
   "source": {
     "type": "json",
     "system": "<system-id>",
-    "url": "person"
+    "url": "/person?query={\"query\": \"{person{id name address{streetAddress postalCode country} dateOfBirth}}\"}"
   },
   "transform": {
     "type": "dtl",
