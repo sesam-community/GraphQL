@@ -24,8 +24,6 @@ Connector for Sesam to query API's that use the GraphQL query language. This ver
       "baseurl": "https://somewebpage.com/",
       "client_id": "<client ID for Azure AD authentication>",
       "client_secret": "<client secret for Azure AD authentication>",
-      "person-query": "{\"query\": \"{person{id name address{streetAddress postalCode country} dateOfBirth}}\"}",
-      "person-url": "/person",
       "grant_type": "client_credentials",
       "resource": "<Azure AD ID of the webapp you're querying>",
       "token_url": "https://login.windows.net/<token_service_id>/oauth2/token"
