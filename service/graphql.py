@@ -5,10 +5,8 @@ from data_access import DataAccess
 from utils import stream_json
 import sys
 import os
-import json
 
 app = Flask(__name__)
-logger = sesam_logger("GraphQL", app=app)
 
 required_env_vars = ["baseurl",  "client_id", "client_secret", "grant_type", "resource", "token_url"]
 optional_env_vars = ["LOG_LEVEL"]
@@ -16,6 +14,10 @@ config = VariablesConfig(required_env_vars, optional_env_vars=optional_env_vars)
 if not config.validate():
     sys.exit(1)
 
+if hasattr(config, "LOG_LEVEL") and config.LOG_LEVEL == "DEBUG":
+    logger = sesam_logger("GraphQL", app=app)
+else:
+    logger = sesam_logger("GraphQL")
 
 data_access_layer = DataAccess(config)
 
@@ -24,10 +26,11 @@ data_access_layer = DataAccess(config)
 def get(path):
 
     url = os.environ.get(path+"-url")
-    query = os.environ.get(str(path+"-query"))
-    logger.debug(query)
+    query = os.environ.get(str(path + "-query"))
+    logger.debug("url from env var: " + str(url))
+    logger.debug("query from env var: " + str(query))
+
     entities = stream_json(data_access_layer.get_entities(url, query))
-    logger.debug(entities)
     return Response(entities, mimetype='application/json')
 
 
