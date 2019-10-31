@@ -25,7 +25,7 @@ data_access_layer = DataAccess(config)
 @app.route("/<path:path>", methods=["GET"])
 def get(path):
 
-    url = request.args["url"]
+    url = path
     query = request.args["query"]
     logger.debug("url from request.args: " + str(url))
     logger.debug("query from request.args: " + str(query))
