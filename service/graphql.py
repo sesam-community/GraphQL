@@ -25,10 +25,10 @@ data_access_layer = DataAccess(config)
 @app.route("/<path:path>", methods=["GET"])
 def get(path):
 
-    url = os.environ.get(path+"-url")
-    query = os.environ.get(str(path + "-query"))
-    logger.debug("url from env var: " + str(url))
-    logger.debug("query from env var: " + str(query))
+    url = request.args["url"]
+    query = request.args["query"]
+    logger.debug("url from request.args: " + str(url))
+    logger.debug("query from request.args: " + str(query))
 
     entities = stream_json(data_access_layer.get_entities(url, query))
     return Response(entities, mimetype='application/json')
