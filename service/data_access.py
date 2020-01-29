@@ -16,7 +16,8 @@ class DataAccess:
         logger.debug("full url: " + url)
         req = self.request("POST", url, query)
         if not req.ok:
-            logger.info('Request not ok')
+            logger.info('Request not ok, status code %s' %req.status_code)
+            raise AssertionError('Request not ok, status code %s' %req.status_code)
         else:
             res = req.json()
             logger.debug("request ok. yielding result.")
